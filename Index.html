@@ -1,0 +1,4321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#05080d">
+<title>Empire Life V1.0</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    width:100%;
+    min-height:100%;
+    background:#05080d;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    padding-bottom:82px;
+}
+
+.app{
+    max-width:700px;
+    margin:auto;
+}
+
+/* =====================================================
+   MAIN MENU
+===================================================== */
+
+#mainMenu{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 50% 35%,rgba(38,100,170,.28),transparent 35%),
+        linear-gradient(180deg,#071321 0%,#030509 100%);
+}
+
+#mainMenu::before,
+#mainMenu::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+}
+
+#mainMenu::before{
+    width:420px;
+    height:420px;
+    background:radial-gradient(circle,rgba(47,129,226,.20),transparent 68%);
+    animation:planetGlow 5s ease-in-out infinite;
+}
+
+#mainMenu::after{
+    width:2px;
+    height:2px;
+    background:#fff;
+    box-shadow:
+        20px 30px #fff,
+        70px 120px #fff,
+        120px 45px #aaa,
+        180px 180px #fff,
+        230px 75px #aaa,
+        290px 140px #fff,
+        340px 30px #fff,
+        390px 210px #aaa,
+        -30px 180px #fff,
+        -90px 70px #aaa,
+        -150px 230px #fff,
+        -200px 120px #aaa,
+        -250px 30px #fff,
+        -300px 190px #fff,
+        10px -120px #aaa,
+        150px -80px #fff,
+        -180px -100px #fff;
+    opacity:.65;
+    animation:stars 8s linear infinite;
+}
+
+.menu-content{
+    position:relative;
+    z-index:3;
+    width:92%;
+    max-width:500px;
+    text-align:center;
+    padding:25px;
+}
+
+.earth{
+    width:170px;
+    height:170px;
+    margin:0 auto 22px;
+    border-radius:50%;
+    background:
+        radial-gradient(circle at 35% 30%,#5fb7ff 0%,#1768b0 30%,#0a315b 65%,#020914 100%);
+    box-shadow:
+        0 0 35px rgba(48,145,255,.5),
+        0 0 90px rgba(48,145,255,.18);
+    position:relative;
+    animation:earthFloat 5s ease-in-out infinite;
+}
+
+.earth::before{
+    content:"";
+    position:absolute;
+    width:75px;
+    height:42px;
+    left:35px;
+    top:38px;
+    border-radius:55% 35% 45% 60%;
+    background:#4c9b57;
+    transform:rotate(-15deg);
+    opacity:.9;
+}
+
+.earth::after{
+    content:"";
+    position:absolute;
+    width:60px;
+    height:35px;
+    right:24px;
+    bottom:32px;
+    border-radius:45% 60% 35% 50%;
+    background:#4b9854;
+    transform:rotate(20deg);
+}
+
+.menu-title{
+    font-size:48px;
+    font-weight:900;
+    letter-spacing:3px;
+    text-shadow:0 0 25px rgba(72,160,255,.55);
+    margin:0;
+}
+
+.menu-subtitle{
+    color:#9eafc2;
+    font-size:16px;
+    margin:8px 0 35px;
+}
+
+.ready{
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:18px;
+    animation:readyPulse 2.5s ease-in-out infinite;
+}
+
+.menu-button{
+    display:block;
+    width:100%;
+    max-width:350px;
+    margin:10px auto;
+    padding:16px;
+    border:1px solid rgba(90,157,226,.45);
+    border-radius:15px;
+    color:white;
+    background:rgba(28,54,80,.75);
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.menu-button:hover{
+    background:rgba(43,91,135,.9);
+    transform:translateY(-2px);
+}
+
+.menu-button.start{
+    background:linear-gradient(135deg,#287fe5,#1755a0);
+    border-color:#4a9bff;
+    box-shadow:0 0 25px rgba(42,127,229,.25);
+}
+
+.menu-button:active{
+    transform:scale(.97);
+}
+
+.menu-version{
+    margin-top:25px;
+    font-size:11px;
+    color:#5c6b7b;
+}
+
+/* =====================================================
+   INTRO
+===================================================== */
+
+#introScreen{
+    position:fixed;
+    inset:0;
+    z-index:900;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:
+        radial-gradient(circle at 50% 45%,#173d63 0%,#081321 42%,#030509 100%);
+}
+
+.intro-content{
+    width:90%;
+    max-width:500px;
+    animation:introIn 1.2s ease;
+}
+
+.intro-small{
+    color:#8fa8c0;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    font-size:12px;
+}
+
+.intro-title{
+    font-size:42px;
+    margin:18px 0;
+}
+
+.intro-text{
+    line-height:1.8;
+    color:#c4d0dc;
+    font-size:16px;
+}
+
+.intro-money{
+    font-size:42px;
+    font-weight:bold;
+    margin:25px 0;
+}
+
+.intro-button{
+    border:0;
+    padding:16px 35px;
+    border-radius:14px;
+    background:#287fe5;
+    color:#fff;
+    font-weight:bold;
+    font-size:16px;
+}
+
+/* =====================================================
+   GAME UI
+===================================================== */
+
+.header{
+    background:#151d27;
+    padding:16px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    border-bottom:1px solid #293543;
+}
+
+.header h1{
+    margin:0;
+    font-size:22px;
+}
+
+.date{
+    font-size:13px;
+    color:#8996a5;
+    margin-top:5px;
+}
+
+.screen{
+    display:none;
+    padding:14px;
+}
+
+.screen.active{
+    display:block;
+}
+
+.card{
+    background:#18222d;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:12px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#193b63,#18232f);
+}
+
+.money{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.label{
+    font-size:12px;
+    color:#8996a5;
+}
+
+.small{
+    font-size:13px;
+    color:#8996a5;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:9px 0;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.stat{
+    background:#202c38;
+    padding:13px;
+    border-radius:12px;
+}
+
+button{
+    width:100%;
+    border:0;
+    border-radius:12px;
+    padding:13px;
+    margin-top:8px;
+    font-size:15px;
+    font-weight:bold;
+    color:white;
+    background:#2875e5;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+button.green{background:#267a4c}
+button.red{background:#8d3434}
+button.dark{background:#293744}
+button.gold{background:#856b20}
+
+.market-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.market-card{
+    background:#19242f;
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid #293746;
+}
+
+.market-image{
+    width:100%;
+    height:145px;
+    object-fit:cover;
+    display:block;
+    background:#263442;
+}
+
+.market-body{
+    padding:13px;
+}
+
+.market-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.price{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.badge{
+    display:inline-block;
+    background:#293a4b;
+    border-radius:20px;
+    padding:5px 8px;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.good{color:#54df8b}
+.bad{color:#ff6666}
+.warning{color:#ffd45c}
+
+.news{
+    background:#19242f;
+    border-left:4px solid #367de8;
+    padding:13px;
+    border-radius:9px;
+    margin-bottom:10px;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:72px;
+    background:#151d27;
+    border-top:1px solid #293543;
+    display:flex;
+    z-index:100;
+}
+
+.nav{
+    flex:1;
+    background:none;
+    padding:5px 2px;
+    margin:0;
+    font-size:10px;
+    border-radius:0;
+}
+
+.nav-icon{
+    display:block;
+    font-size:20px;
+    margin-bottom:3px;
+}
+
+.nav.active{
+    background:#202d3a;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.setting-row{
+    background:#202c38;
+    padding:13px;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+.setting-row label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.progress{
+    height:9px;
+    background:#0d131a;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:#347fe8;
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:88px;
+    transform:translateX(-50%) translateY(20px);
+    background:#202d3a;
+    border:1px solid #3a4b5d;
+    border-radius:12px;
+    padding:12px 18px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:1200;
+    max-width:90%;
+    text-align:center;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+.life-choice{
+    border:1px solid #30475b;
+    background:#1b2935;
+    border-radius:14px;
+    padding:14px;
+    margin:9px 0;
+}
+.life-choice h3{margin:0 0 6px}
+.life-choice p{margin:5px 0;color:#9aaaba;font-size:13px}
+.stat-bar{
+    height:10px;background:#0d131a;border-radius:10px;overflow:hidden;margin-top:6px;
+}
+.stat-fill{height:100%;background:#347fe8}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.action-grid button{margin-top:0}
+.tag{
+    display:inline-block;padding:4px 8px;border-radius:12px;
+    background:#293a4b;font-size:11px;margin:3px 3px 0 0;
+}
+.nav-wrap{
+    position:fixed;bottom:0;left:0;right:0;height:72px;
+    background:#151d27;border-top:1px solid #293543;z-index:100;
+    overflow-x:auto;overflow-y:hidden;
+}
+.nav-wrap .bottom-nav{position:static;width:max-content;min-width:100%;height:72px}
+.nav-wrap .nav{min-width:78px}
+.business-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.business-controls button{margin-top:0;font-size:12px}
+.business-panel{background:#101820;border:1px solid #2a3a48;border-radius:12px;padding:10px;margin-top:8px}
+
+@media(max-width:430px){
+    .action-grid{grid-template-columns:1fr}
+}
+
+
+@keyframes earthFloat{
+    0%,100%{transform:translateY(0) rotate(0deg)}
+    50%{transform:translateY(-10px) rotate(3deg)}
+}
+
+@keyframes planetGlow{
+    0%,100%{transform:scale(.9);opacity:.6}
+    50%{transform:scale(1.15);opacity:1}
+}
+
+@keyframes stars{
+    from{transform:translateY(0)}
+    to{transform:translateY(25px)}
+}
+
+@keyframes readyPulse{
+    0%,100%{opacity:.75}
+    50%{opacity:1}
+}
+
+@keyframes introIn{
+    from{opacity:0;transform:translateY(25px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:430px){
+
+    .menu-title{
+        font-size:39px;
+    }
+
+    .earth{
+        width:145px;
+        height:145px;
+    }
+
+    .market-grid{
+        gap:8px;
+    }
+
+    .market-image{
+        height:120px;
+    }
+
+    .market-body{
+        padding:10px;
+    }
+
+}
+
+/* =====================================================
+   V2 LIFE / FAMILY / LONGEVITY / MULTIPLAYER
+===================================================== */
+.profile-card{background:linear-gradient(135deg,#193b63,#18232f);border:1px solid #31577c}
+.family-member{background:#202c38;border-radius:13px;padding:12px;margin:8px 0}
+.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pill{display:inline-block;background:#293a4b;border-radius:20px;padding:5px 9px;font-size:11px;margin:3px}
+.danger-card{border:1px solid #713737;background:#2a1719}
+.success-card{border:1px solid #2d7650;background:#14261d}
+.locked{opacity:.65}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     MAIN MENU
+===================================================== -->
+
+<div id="mainMenu">
+
+    <div class="menu-content">
+
+        <div class="earth"></div>
+
+        <h1 class="menu-title">
+            EMPIRE LIFE
+        </h1>
+
+        
+<div class="menu-subtitle">
+    Start with nothing. Build everything.
+</div>
+
+<div style="
+    color:#6f91b2;
+    font-size:13px;
+    letter-spacing:2px;
+    margin-top:-22px;
+    margin-bottom:35px;
+">
+    MADE BY BLAKE
+</div>
+        <div class="ready">
+            READY FOR A NEW LIFE?
+        </div>
+
+        <button
+            class="menu-button start"
+            onclick="startNewLife()">
+            ▶ START NEW LIFE
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="continueGame()">
+            💾 CONTINUE
+        </button>
+
+        <button
+            class="menu-button"
+            onclick="openMenuSettings()">
+            ⚙️ SETTINGS
+        </button>
+
+        <div class="menu-version">
+            EMPIRE LIFE V2.0
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     INTRO
+===================================================== -->
+
+<div id="introScreen">
+
+    <div class="intro-content">
+
+        <div class="intro-small">
+            A NEW LIFE BEGINS
+        </div>
+
+        <h1 class="intro-title">
+            🌅 Your Story Starts Now
+        </h1>
+
+        <div class="intro-text">
+
+            Age 10.<br>
+            No job.<br>
+            No car.<br>
+            No company.<br>
+            No investments.
+
+        </div>
+
+        <div class="intro-money">
+            £0
+        </div>
+
+        <div class="intro-text">
+            You have nothing...
+            <br>
+            <strong>but you have a whole life ahead of you.</strong>
+        </div>
+
+        <button
+            class="intro-button"
+            onclick="enterGame()">
+            🚀 BEGIN MY LIFE
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<div class="app">
+
+<header class="header">
+    <h1>🌍 Empire Life</h1>
+    <div class="date" id="date"></div>
+</header>
+
+
+<section id="home" class="screen active">
+
+    <div class="card hero">
+
+        <div class="label">
+            AVAILABLE CASH
+        </div>
+
+        <div class="money" id="cash">
+            £0
+        </div>
+
+        <br>
+
+        <div class="label">
+            NET WORTH
+        </div>
+
+        <h2 id="networth">
+            £0
+        </h2>
+
+    </div>
+
+
+    <div class="grid">
+
+        <div class="stat">
+            <div class="label">🎂 AGE</div>
+            <b id="homeAge">10</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">🧠 SKILLS</div>
+            <b id="homeSkills">0</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">💼 JOB</div>
+            <b id="job">Unemployed</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">💷 INCOME</div>
+            <b id="salary">£0</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">🚗 CARS</div>
+            <b id="carCount">0</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">🏠 PROPERTY</div>
+            <b id="propertyCount">0</b>
+        </div>
+
+        <div class="stat">
+            <div class="label">❤️ LIFE WEALTH</div>
+            <b id="homeLifeWealth">0</b>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>📰 Latest News</h3>
+
+        <div id="latestNews">
+            Welcome to Empire Life.
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <button onclick="advanceMonth()">
+            ⏩ Advance Month
+        </button>
+
+        <button onclick="show('market')">
+            🛒 Visit Marketplace
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<section id="life" class="screen">
+    <h2>🌱 My Life</h2>
+
+    <div class="card hero">
+        <div class="label">AGE</div>
+        <div class="money" id="ageDisplay">10</div>
+        <div class="row"><span>🎓 Education</span><b id="educationDisplay">School</b></div>
+        <div class="row"><span>🏫 School</span><b id="schoolDisplay">Not chosen</b></div>
+        <div class="row"><span>🧠 Skills</span><b id="skillDisplay">0</b></div>
+    </div>
+
+    <div class="card">
+        <div class="row"><span>😊 Happiness</span><b id="happinessDisplay">75%</b></div>
+        <div class="stat-bar"><div id="happinessBar" class="stat-fill" style="width:75%"></div></div>
+        <div class="row"><span>😰 Stress</span><b id="stressDisplay">10%</b></div>
+        <div class="stat-bar"><div id="stressBar" class="stat-fill" style="width:10%"></div></div>
+    </div>
+
+    <div id="lifeChoices"></div>
+
+    <div class="card profile-card">
+        <h3>👤 My Character</h3>
+        <div class="row"><span>Name</span><b id="characterName">Not created</b></div>
+        <div class="row"><span>Personality</span><b id="personalityDisplay">Balanced</b></div>
+        <div class="row"><span>Life Wealth</span><b id="lifeWealthDisplay">0</b></div>
+        <button onclick="openCharacterCreator()">✏️ Edit Character</button>
+    </div>
+
+    <div class="card">
+        <h3>❤️ Family</h3>
+        <div id="familyPanel"></div>
+    </div>
+
+    <div class="card">
+        <h3>🧬 Longevity</h3>
+        <div id="longevityPanel"></div>
+    </div>
+
+    <div class="card">
+        <h3>🌐 Multiplayer</h3>
+        <div id="multiplayerPanel"></div>
+    </div>
+</section>
+
+<section id="work" class="screen">
+    <h2>🛠️ Work</h2>
+    <div id="workInfo"></div>
+</section>
+
+<section id="career" class="screen">
+
+    <h2>💼 Career</h2>
+
+    <div id="careerInfo"></div>
+
+    <h3>Available Jobs</h3><p class='small'>Careers unlock at age 18. Education and skills can improve your options.</p>
+
+    <div id="jobs"></div>
+
+</section>
+
+
+<section id="market" class="screen">
+
+    <h2>🛒 Marketplace</h2>
+
+    <div class="card">
+
+        <p class="small">
+            Choose what you want to buy.
+        </p>
+
+        <div class="grid">
+
+            <button onclick="marketTab('cars')">
+                🚗 Cars
+            </button>
+
+            <button onclick="marketTab('property')">
+                🏠 Property
+            </button>
+
+            <button onclick="marketTab('business')">
+                🏢 Businesses
+            </button>
+
+            <button onclick="marketTab('invest')">
+                📈 Investments
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="marketContent"></div>
+
+</section>
+
+
+<section id="owned" class="screen">
+<div class="card">
+  <h3>🏢 My Businesses</h3>
+  <p class="small">Manage companies you own: invest, take profits, expand, cut costs, or sell.</p>
+  <div id="businessManagement"></div>
+</div>
+
+
+    <h2>👛 My Assets</h2>
+
+    <div class="card">
+
+        <div class="row">
+            <span>🚗 Cars</span>
+            <b id="ownedCars">£0</b>
+        </div>
+
+        <div class="row">
+            <span>🏠 Property</span>
+            <b id="ownedProperty">£0</b>
+        </div>
+
+        <div class="row">
+            <span>🏢 Businesses</span>
+            <b id="ownedBusiness">£0</b>
+        </div>
+
+        <div class="row">
+            <span>📈 Investments</span>
+            <b id="ownedInvestments">£0</b>
+        </div>
+
+    </div>
+
+    <div id="ownedContent"></div>
+
+</section>
+
+
+<section id="newsScreen" class="screen">
+
+    <h2>📰 World News</h2>
+
+    <div id="newsList"></div>
+
+</section>
+
+
+<section id="more" class="screen">
+
+    <h2>☰ More</h2>
+
+    <div class="card">
+        <h3>🌐 Online Identity</h3>
+        <p class="small">Create the online name friends would see in Empire Life. The V2 file stores this locally; true internet multiplayer needs a server/backend.</p>
+        <button onclick="setOnlineName()">🏷️ Set Online Name</button>
+        <div class="row"><span>Online name</span><b id="moreOnlineName">Not set</b></div>
+    </div>
+
+    <div class="card">
+
+        <h3>🏦 Bank</h3>
+
+        <div class="row">
+            <span>Debt</span>
+            <b id="debt">£0</b>
+        </div>
+
+        <button onclick="loan(5000)">
+            Borrow £5,000
+        </button>
+
+        <button onclick="loan(20000)">
+            Borrow £20,000
+        </button>
+
+        <button onclick="loan(100000)">
+            Borrow £100,000
+        </button>
+
+        <button class="green" onclick="repay(5000)">
+            Repay £5,000
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>🔊 Sound & Music</h3>
+
+        <div class="setting-row">
+
+            <label>
+                <span>🔊 Sound Effects</span>
+
+                <input
+                    type="checkbox"
+                    id="soundToggle"
+                    checked
+                    onchange="toggleSound()"
+                >
+
+            </label>
+
+        </div>
+
+
+        <div class="setting-row">
+
+            <label>
+                <span>🎵 Background Music</span>
+
+                <input
+                    type="checkbox"
+                    id="musicToggle"
+                    onchange="toggleMusic()"
+                >
+
+            </label>
+
+        </div>
+
+
+        <div class="setting-row">
+
+            <label>
+                <span>🔉 Effects Volume</span>
+                <span id="effectVolumeText">70%</span>
+            </label>
+
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="70"
+                id="effectVolume"
+                oninput="setEffectVolume()"
+            >
+
+        </div>
+
+
+        <div class="setting-row">
+
+            <label>
+                <span>🎵 Music Volume</span>
+                <span id="musicVolumeText">25%</span>
+            </label>
+
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="25"
+                id="musicVolume"
+                oninput="setMusicVolume()"
+            >
+
+        </div>
+
+        <button class="dark" onclick="testSound()">
+            🔊 Test Sound
+        </button>
+
+    </div>
+
+
+    <div class="card">
+
+        <h3>💾 Game</h3>
+
+        <button onclick="saveGame()">
+            💾 Save Game
+        </button>
+
+        <button onclick="loadGame()">
+            📂 Load Game
+        </button>
+
+        <button class="red" onclick="newGame()">
+            🗑️ New Game
+        </button>
+
+    </div>
+
+</section>
+
+
+<div class="nav-wrap">
+<nav class="bottom-nav">
+    <button class="nav active" onclick="show('home',this)"><span class="nav-icon">🏠</span>Home</button>
+    <button class="nav" onclick="show('life',this)"><span class="nav-icon">🌱</span>Life</button>
+    <button class="nav" onclick="show('career',this)"><span class="nav-icon">💼</span>Career</button>
+    <button class="nav" onclick="show('work',this)"><span class="nav-icon">🛠️</span>Work</button>
+    <button class="nav" onclick="show('market',this)"><span class="nav-icon">🛒</span>Market</button>
+    <button class="nav" onclick="show('owned',this)"><span class="nav-icon">👛</span>Assets</button>
+    <button class="nav" onclick="show('newsScreen',this)"><span class="nav-icon">📰</span>News</button>
+    <button class="nav" onclick="show('more',this)"><span class="nav-icon">☰</span>More</button>
+</nav>
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   GAME DATA
+===================================================== */
+
+let game={
+    year:2026,
+    month:1,
+    birthYear:2016,
+    age:10,
+    cash:0,
+    job:"Unemployed",
+    salary:0,
+    career:null,
+    level:0,
+    experience:0,
+    performance:70,
+    debt:0,
+    cars:[],
+    properties:[],
+    companies:[],
+    investments:{},
+    news:[],
+    school:"",
+    education:"School",
+    educationLevel:0,
+    qualification:"",
+    skills:0,
+    happiness:75,
+    stress:10,
+    workAction:false,
+    educationAction:false,
+
+    /* V2: character, family, mortality and longevity */
+    characterName:"",
+    personality:"Balanced",
+    gender:"Not specified",
+    family:{
+        partner:null,
+        children:[],
+        grandchildren:[],
+        familyHappiness:70
+    },
+    lifeWealth:0,
+    health:90,
+    lifespan:85,
+    causeOfDeath:"",
+    deceased:false,
+    dynastyGeneration:1,
+    successionPending:false,
+    longevity:{
+        companyOwned:false,
+        research:0,
+        stage:0,
+        project500:false,
+        unlockedAge:85
+    },
+    onlineName:"",
+    friends:[]
+};
+
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+let soundEnabled=true;
+let musicEnabled=false;
+let effectsVolume=.70;
+let musicVolume=.25;
+
+let audioContext=null;
+let musicTimer=null;
+let musicIndex=0;
+
+
+/* =====================================================
+   AUDIO INITIALISATION
+===================================================== */
+
+function initAudio(){
+
+    if(!audioContext){
+
+        const AudioContext=
+            window.AudioContext||
+            window.webkitAudioContext;
+
+        if(!AudioContext){
+            return false;
+        }
+
+        audioContext=new AudioContext();
+
+    }
+
+    if(audioContext.state==="suspended"){
+        audioContext.resume();
+    }
+
+    return true;
+}
+
+
+/* =====================================================
+   SOUND EFFECTS
+===================================================== */
+
+function tone(freq,duration=.12,type="sine",volume=.2,delay=0){
+
+    if(!soundEnabled) return;
+
+    if(!initAudio()) return;
+
+    const osc=
+        audioContext.createOscillator();
+
+    const gain=
+        audioContext.createGain();
+
+    const start=
+        audioContext.currentTime+delay;
+
+    const end=start+duration;
+
+    osc.type=type;
+
+    osc.frequency.setValueAtTime(
+        freq,
+        start
+    );
+
+    gain.gain.setValueAtTime(
+        0,
+        start
+    );
+
+    gain.gain.linearRampToValueAtTime(
+        volume*effectsVolume,
+        start+.015
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        end
+    );
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    osc.start(start);
+    osc.stop(end);
+}
+
+
+function clickSound(){
+    tone(520,.045,"square",.08);
+}
+
+
+function moneySound(){
+
+    tone(520,.08,"sine",.15);
+    tone(720,.10,"sine",.15,.07);
+    tone(950,.13,"sine",.13,.15);
+
+}
+
+
+function buySound(){
+
+    tone(280,.08,"square",.10);
+    tone(420,.08,"square",.11,.07);
+    tone(620,.16,"sine",.14,.14);
+
+}
+
+
+function sellSound(){
+
+    tone(900,.08,"sine",.12);
+    tone(700,.08,"sine",.12,.08);
+    tone(500,.15,"sine",.10,.16);
+
+}
+
+
+function profitSound(){
+
+    tone(500,.08,"triangle",.12);
+    tone(650,.08,"triangle",.13,.08);
+    tone(850,.12,"triangle",.14,.16);
+    tone(1100,.18,"sine",.12,.27);
+
+}
+
+
+function lossSound(){
+
+    tone(500,.12,"sawtooth",.10);
+    tone(380,.15,"sawtooth",.10,.10);
+    tone(240,.22,"sawtooth",.09,.22);
+
+}
+
+
+function badNewsSound(){
+
+    tone(180,.16,"square",.13);
+    tone(150,.18,"square",.13,.18);
+    tone(120,.25,"sawtooth",.10,.39);
+
+}
+
+
+function newsSound(){
+
+    tone(650,.07,"square",.09);
+    tone(850,.07,"square",.10,.10);
+
+}
+
+
+function promotionSound(){
+
+    tone(440,.12,"triangle",.13);
+    tone(550,.12,"triangle",.14,.12);
+    tone(660,.12,"triangle",.15,.24);
+    tone(880,.25,"triangle",.16,.36);
+
+}
+
+
+function achievementSound(){
+
+    tone(523,.10,"sine",.13);
+    tone(659,.10,"sine",.13,.10);
+    tone(784,.10,"sine",.13,.20);
+    tone(1047,.30,"sine",.15,.30);
+
+}
+
+
+function loanSound(){
+
+    tone(300,.12,"sine",.10);
+    tone(450,.14,"sine",.12,.13);
+    tone(650,.18,"sine",.13,.28);
+
+}
+
+
+function debtSound(){
+
+    tone(700,.08,"sine",.10);
+    tone(550,.10,"sine",.10,.09);
+
+}
+
+
+/* =====================================================
+   MAIN MENU MUSIC
+===================================================== */
+
+const menuMelody=[
+    261.63,
+    329.63,
+    392.00,
+    523.25,
+    392.00,
+    329.63,
+    293.66,
+    349.23,
+    440.00,
+    523.25,
+    440.00,
+    349.23
+];
+
+
+function playMusicNote(freq,duration=.7){
+
+    if(!musicEnabled) return;
+
+    if(!initAudio()) return;
+
+    const osc=
+        audioContext.createOscillator();
+
+    const gain=
+        audioContext.createGain();
+
+    const now=
+        audioContext.currentTime;
+
+    osc.type="sine";
+
+    osc.frequency.value=freq;
+
+    gain.gain.setValueAtTime(
+        0,
+        now
+    );
+
+    gain.gain.linearRampToValueAtTime(
+        musicVolume*.09,
+        now+.08
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        now+duration
+    );
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    osc.start(now);
+    osc.stop(now+duration);
+
+}
+
+
+function startMusic(){
+
+    if(musicTimer) return;
+
+    musicEnabled=true;
+
+    musicIndex=0;
+
+    musicTimer=setInterval(()=>{
+
+        playMusicNote(
+            menuMelody[musicIndex],
+            .62
+        );
+
+        musicIndex++;
+
+        if(
+            musicIndex>=
+            menuMelody.length
+        ){
+            musicIndex=0;
+        }
+
+    },700);
+
+}
+
+
+function stopMusic(){
+
+    if(musicTimer){
+
+        clearInterval(musicTimer);
+
+        musicTimer=null;
+
+    }
+
+}
+
+
+/* =====================================================
+   START NEW LIFE
+===================================================== */
+
+function startNewLife(){
+
+    initAudio();
+
+    startMusic();
+
+    achievementSound();
+
+    document
+        .getElementById("mainMenu")
+        .style.display="none";
+
+    document
+        .getElementById("introScreen")
+        .style.display="flex";
+
+}
+
+
+/* =====================================================
+   CONTINUE
+===================================================== */
+
+function continueGame(){
+
+    initAudio();
+
+    const saved=
+        localStorage.getItem(
+            "EMPIRE_LIFE_V20"
+        );
+
+    if(saved){
+
+        try{
+
+            game=JSON.parse(saved);
+
+        }catch(e){}
+
+    }
+
+    startMusic();
+
+    document
+        .getElementById("mainMenu")
+        .style.display="none";
+
+    document
+        .getElementById("introScreen")
+        .style.display="none";
+
+    render();
+
+    achievementSound();
+
+}
+
+
+/* =====================================================
+   ENTER GAME
+===================================================== */
+
+function enterGame(){
+
+    initAudio();
+
+    /* Starting a new life always begins at age 10 */
+    game={
+        year:2026,month:1,birthYear:2016,age:10,cash:0,
+        job:"Unemployed",salary:0,career:null,level:0,experience:0,
+        performance:70,debt:0,cars:[],properties:[],companies:[],
+        investments:{},news:[],school:"",education:"School",
+        educationLevel:0,qualification:"",skills:0,happiness:75,
+        stress:10,workAction:false,educationAction:false
+    };
+    saveSilent();
+
+    stopMusic();
+
+    musicEnabled=false;
+
+    promotionSound();
+
+    document
+        .getElementById("introScreen")
+        .style.display="none";
+
+    render();
+
+    showToast(
+        "🌍 Welcome to your new life."
+    );
+    setTimeout(openCharacterCreator,250);
+
+}
+
+
+/* =====================================================
+   SETTINGS FROM MENU
+===================================================== */
+
+function openMenuSettings(){
+
+    initAudio();
+
+    showToast(
+        "⚙️ Sound settings are available inside the game."
+    );
+
+    clickSound();
+
+}
+
+
+/* =====================================================
+   GAME HELPERS
+===================================================== */
+
+function money(number){
+
+    return "£"+
+        Math.round(number)
+        .toLocaleString("en-GB");
+
+}
+
+
+function dateString(){
+
+    return new Date(
+        game.year,
+        game.month-1
+    ).toLocaleString(
+        "en-GB",
+        {
+            month:"long",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+function carValue(){
+
+    return game.cars.reduce(
+        (total,item)=>
+            total+item.price,
+        0
+    );
+
+}
+
+
+function propertyValue(){
+
+    return game.properties.reduce(
+        (total,item)=>
+            total+item.price,
+        0
+    );
+
+}
+
+
+function businessValue(){
+
+    return game.companies.reduce(
+        (total,item)=>
+            total+item.value,
+        0
+    );
+
+}
+
+
+function investmentValue(){
+
+    return Object.values(
+        game.investments
+    ).reduce(
+        (total,item)=>
+            total+item,
+        0
+    );
+
+}
+
+
+function netWorth(){
+
+    return game.cash+
+        carValue()+
+        propertyValue()+
+        businessValue()+
+        investmentValue()-
+        game.debt;
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function show(id,button){
+
+    clickSound();
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            s=>s.classList.remove("active")
+        );
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+    document
+        .querySelectorAll(".nav")
+        .forEach(
+            n=>n.classList.remove("active")
+        );
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    render();
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+   MARKET DATA
+===================================================== */
+
+const cars=[
+
+{
+name:"Used Hatchback",
+price:4500,
+running:180,
+image:"https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Family SUV",
+price:28000,
+running:350,
+image:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Executive Saloon",
+price:48000,
+running:500,
+image:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Electric SUV",
+price:62000,
+running:280,
+image:"https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Luxury Sports Car",
+price:150000,
+running:1200,
+image:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Supercar",
+price:650000,
+running:3500,
+image:"https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80"
+}
+
+];
+
+
+const properties=[
+
+{
+name:"City Flat",
+price:120000,
+rent:750,
+image:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"2-Bed Terraced House",
+price:190000,
+rent:1000,
+image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"3-Bed Semi-Detached",
+price:280000,
+rent:1450,
+image:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"4-Bed Detached",
+price:450000,
+rent:2200,
+image:"https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Luxury Home",
+price:1200000,
+rent:5500,
+image:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Mansion",
+price:5000000,
+rent:18000,
+image:"https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80"
+}
+
+];
+
+
+const businesses=[
+
+{
+name:"Small Restaurant",
+price:25000,
+profit:2200,
+image:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Retail Shop",
+price:80000,
+profit:6500,
+image:"https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Construction Company",
+price:250000,
+profit:22000,
+image:"https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Manufacturing Company",
+price:1500000,
+profit:85000,
+image:"https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Energy Company",
+price:10000000,
+profit:450000,
+image:"https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Data Centre",
+price:50000000,
+profit:1800000,
+image:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"AI Company",
+price:100000000,
+profit:3500000,
+image:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+name:"Water Company",
+price:250000000,
+profit:8000000,
+image:"https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80"
+}
+
+];
+
+
+const investments=[
+
+["Global Index",.06],
+["Technology",.09],
+["AI",.13],
+["Energy",.08],
+["Water",.07]
+
+];
+
+
+/* =====================================================
+   CAREERS
+===================================================== */
+
+const careers=[
+{name:"Retail",levels:[["Shop Assistant",24000,0],["Senior Assistant",28000,12],["Department Supervisor",34000,24],["Store Manager",45000,40],["Regional Manager",65000,60]]},
+{name:"Hospitality",levels:[["Kitchen/Hotel Assistant",23500,0],["Chef/Senior Staff",30000,12],["Head Chef",42000,24],["Restaurant Manager",52000,40],["Hotel Manager",75000,60]]},
+{name:"Warehouse & Logistics",levels:[["Warehouse Operative",25000,0],["Senior Operative",30000,12],["Team Leader",36000,24],["Warehouse Manager",50000,40],["Operations Director",90000,65]]},
+{name:"Construction",levels:[["Construction Worker",31000,0],["Skilled Worker",38000,12],["Site Supervisor",48000,24],["Site Manager",60000,40],["Project Manager",80000,60]]},
+{name:"Trades",levels:[["Apprentice Tradesperson",22000,0],["Qualified Tradesperson",35000,12],["Senior Tradesperson",45000,24],["Site Supervisor",56000,40],["Trade Business Owner",85000,60]]},
+{name:"Transport",levels:[["Delivery Driver",27000,0],["HGV Driver",38000,12],["Senior HGV Driver",45000,24],["Transport Supervisor",56000,40],["Transport Manager",75000,60]]},
+{name:"Rail",levels:[["Rail Operative",30000,0],["Train Driver",48000,18],["Senior Driver",58000,36],["Driver Instructor",68000,50],["Rail Manager",90000,70]]},
+{name:"Healthcare",levels:[["Care Worker",25000,0],["Healthcare Assistant",30000,12],["Senior Healthcare Assistant",36000,24],["Nursing Associate",42000,40],["Healthcare Manager",65000,65]]},
+{name:"Nursing",levels:[["Student Nurse",18000,0],["Registered Nurse",38000,12],["Senior Nurse",45000,30],["Nurse Specialist",55000,48],["Nurse Manager",70000,70]]},
+{name:"Technology",levels:[["IT Technician",30000,0],["Junior Developer",35000,12],["Developer",48000,24],["Senior Developer",65000,40],["Lead Engineer",90000,60],["CTO",150000,85]]},
+{name:"AI & Robotics",levels:[["AI/Robotics Technician",34000,0],["Junior AI Engineer",48000,18],["AI Engineer",70000,36],["Senior AI Engineer",95000,55],["AI Director",140000,75],["CTO",190000,95]]},
+{name:"Cybersecurity",levels:[["Security Analyst",38000,0],["Cybersecurity Engineer",52000,18],["Senior Security Engineer",72000,36],["Security Lead",100000,55],["Security Director",150000,80]]},
+{name:"Engineering",levels:[["Engineering Technician",32000,0],["Junior Engineer",42000,12],["Engineer",58000,24],["Senior Engineer",78000,42],["Engineering Manager",110000,65],["Engineering Director",160000,90]]},
+{name:"Finance",levels:[["Finance Assistant",28000,0],["Accountant",40000,12],["Senior Accountant",55000,24],["Finance Manager",75000,40],["Finance Director",110000,60],["CFO",170000,80]]},
+{name:"Business",levels:[["Sales Assistant",25000,0],["Sales Executive",35000,12],["Sales Manager",50000,24],["Regional Manager",70000,42],["Director",100000,65],["CEO",180000,90]]},
+{name:"Energy",levels:[["Energy Technician",32000,0],["Energy Engineer",50000,18],["Renewable Energy Engineer",70000,36],["Energy Manager",95000,55],["Energy Director",140000,75]]},
+{name:"Manufacturing",levels:[["Factory Worker",26000,0],["Machine Operator",32000,12],["Production Supervisor",42000,24],["Production Manager",65000,45],["Operations Director",105000,70]]},
+{name:"Public Service",levels:[["Civil Service Assistant",26000,0],["Civil Servant",35000,12],["Senior Civil Servant",48000,30],["Department Manager",70000,50],["Director",120000,75]]},
+{name:"Aerospace",levels:[["Aerospace Technician",36000,0],["Junior Aerospace Engineer",50000,18],["Aerospace Engineer",72000,36],["Senior Aerospace Engineer",100000,55],["Programme Director",160000,85]]},
+{name:"Space Science",levels:[["Research Assistant",30000,0],["Space Scientist",50000,18],["Senior Scientist",75000,40],["Mission Scientist",105000,60],["Research Director",160000,90]]}
+];
+
+
+/* =====================================================
+   MARKET
+===================================================== */
+
+function marketTab(type){
+
+    clickSound();
+
+    let html="";
+
+    if(type==="cars")
+        html=carsHTML();
+
+    if(type==="property")
+        html=propertyHTML();
+
+    if(type==="business")
+        html=businessHTML();
+
+    if(type==="invest")
+        html=investmentHTML();
+
+    document
+        .getElementById("marketContent")
+        .innerHTML=html;
+
+}
+
+
+function carsHTML(){
+
+    let html=
+        "<h3>🚗 Car Showroom</h3><div class='market-grid'>";
+
+    cars.forEach((car,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${car.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${car.name}
+                </div>
+
+                <div class="price">
+                    ${money(car.price)}
+                </div>
+
+                <div class="badge">
+                    Running ${money(car.running)}/month
+                </div>
+
+                <button onclick="buyCar(${i})">
+                    🛒 Buy
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+    return html+"</div>";
+
+}
+
+
+function buyCar(i){
+
+    const car=cars[i];
+
+    if(game.cash<car.price){
+
+        lossSound();
+
+        showToast("❌ Not enough money.");
+
+        return;
+    }
+
+    game.cash-=car.price;
+
+    game.cars.push({...car});
+
+    buySound();
+
+    addNews(
+        "🚗 You bought a "+
+        car.name+
+        " for "+
+        money(car.price)+".",
+        false
+    );
+
+    showToast("🚗 Car purchased!");
+
+    render();
+
+}
+
+
+function propertyHTML(){
+
+    let html=
+        "<h3>🏠 Property Market</h3><div class='market-grid'>";
+
+    properties.forEach((p,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${p.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${p.name}
+                </div>
+
+                <div class="price">
+                    ${money(p.price)}
+                </div>
+
+                <div class="badge">
+                    Rent ${money(p.rent)}/month
+                </div>
+
+                <button onclick="buyProperty(${i})">
+                    🏠 Buy
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+    return html+"</div>";
+
+}
+
+
+function buyProperty(i){
+
+    const p=properties[i];
+
+    if(game.cash<p.price){
+
+        lossSound();
+
+        showToast("❌ Not enough money.");
+
+        return;
+    }
+
+    game.cash-=p.price;
+
+    game.properties.push({...p});
+
+    buySound();
+
+    addNews(
+        "🏠 You bought a "+
+        p.name+
+        " for "+
+        money(p.price)+".",
+        false
+    );
+
+    showToast("🏠 Property purchased!");
+
+    render();
+
+}
+
+
+function businessHTML(){
+
+    let html=
+        "<h3>🏢 Business Marketplace</h3><div class='market-grid'>";
+
+    businesses.forEach((b,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${b.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${b.name}
+                </div>
+
+                <div class="price">
+                    ${money(b.price)}
+                </div>
+
+                <div class="badge">
+                    Profit ${money(b.profit)}/month
+                </div>
+                ${b.longevity ? `<div class="badge">🧬 Project 500 research • Unlocks at age 18</div>` : ""}
+
+                <button onclick="buyBusiness(${i})">
+                    🏢 Buy
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+    return html+"</div>";
+
+}
+
+
+function buyBusiness(i){
+
+    const b=businesses[i];
+
+    if(b.longevity && currentAge()<18){
+        showToast("🧬 Longevity research becomes available from age 18.");
+        return;
+    }
+
+    if(game.cash<b.price){
+
+        lossSound();
+
+        showToast("❌ Not enough money.");
+
+        return;
+    }
+
+    game.cash-=b.price;
+
+    game.companies.push({
+        ...b,
+        value:b.price,
+        health:100,
+        totalInvested:b.price,
+        totalDividends:0,
+        expansions:0,
+        costCuts:0,
+        longevity:!!b.longevity,
+        research:0
+    });
+
+    if(b.longevity){
+        game.longevity.companyOwned=true;
+        game.longevity.stage=Math.max(game.longevity.stage||0,1);
+        addNews("🧬 You founded a Longevity Research Company. Project 500 has begun.",true);
+    }
+
+    buySound();
+
+    addNews(
+        "🏢 You bought "+
+        b.name+
+        " for "+
+        money(b.price)+".",
+        false
+    );
+
+    showToast("🏢 Business purchased!");
+
+    render();
+
+}
+
+
+function investmentHTML(){
+
+    let html=
+        "<h3>📈 Investments</h3><div class='market-grid'>";
+
+    investments.forEach((x,i)=>{
+
+        const owned=
+            game.investments[i]||0;
+
+        html+=`
+
+        <div class="market-card">
+
+            <div
+                class="market-image"
+                style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:55px">
+                📈
+            </div>
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${x[0]}
+                </div>
+
+                <div class="small">
+                    Average annual return:
+                    ${Math.round(x[1]*100)}%
+                </div>
+
+                <div class="badge">
+                    Owned ${money(owned)}
+                </div>
+
+                <button onclick="invest(${i})">
+                    📈 Invest
+                </button>
+
+                ${
+                    owned>0
+                    ?
+                    `<button class="dark"
+                        onclick="sellInvest(${i})">
+                        💵 Sell
+                    </button>`
+                    :""
+                }
+
+            </div>
+
+        </div>`;
+
+    });
+
+    return html+"</div>";
+
+}
+
+
+function invest(i){
+
+    const amount=
+        Number(
+            prompt("How much do you want to invest?")
+        );
+
+    if(!amount||amount<=0||amount>game.cash){
+
+        lossSound();
+
+        return;
+    }
+
+    game.cash-=amount;
+
+    game.investments[i]=
+        (game.investments[i]||0)+amount;
+
+    buySound();
+
+    addNews(
+        "📈 You invested "+
+        money(amount)+
+        " into "+
+        investments[i][0]+".",
+        false
+    );
+
+    showToast("📈 Investment made!");
+
+    render();
+
+}
+
+
+function sellInvest(i){
+
+    const owned=
+        game.investments[i]||0;
+
+    if(!owned) return;
+
+    const amount=
+        Number(
+            prompt(
+                "You own "+
+                money(owned)+
+                ". How much do you want to sell?"
+            )
+        );
+
+    if(!amount||amount<=0||amount>owned)
+        return;
+
+    game.investments[i]-=amount;
+
+    game.cash+=amount;
+
+    sellSound();
+
+    showToast(
+        "💵 Sold "+money(amount)
+    );
+
+    render();
+
+}
+
+
+
+
+/* =====================================================
+   V2: CHARACTER / FAMILY / LONGEVITY / MORTALITY
+===================================================== */
+
+function ensureV2(){
+    game.family=game.family||{partner:null,children:[],grandchildren:[],familyHappiness:70};
+    game.family.children=game.family.children||[];
+    game.family.grandchildren=game.family.grandchildren||[];
+    game.longevity=game.longevity||{companyOwned:false,research:0,stage:0,project500:false,unlockedAge:85};
+    game.friends=game.friends||[];
+    game.characterName=game.characterName||"";
+    game.personality=game.personality||"Balanced";
+    game.gender=game.gender||"Not specified";
+    game.health=game.health??90;
+    game.lifespan=game.lifespan||85;
+    game.lifeWealth=game.lifeWealth||0;
+    game.deceased=!!game.deceased;
+    game.dynastyGeneration=game.dynastyGeneration||1;
+    game.onlineName=game.onlineName||"";
+}
+
+function openCharacterCreator(){
+    ensureV2();
+    const name=prompt("👤 Character name:",game.characterName||"");
+    if(name===null) return;
+    if(!name.trim()){showToast("❌ Please enter a name.");return;}
+    const personality=prompt(
+        "🧠 Personality:\n1 Balanced\n2 Ambitious\n3 Family-focused\n4 Adventurous\n5 Philanthropic",
+        game.personality||"Balanced"
+    );
+    if(personality===null)return;
+    const map={"1":"Balanced","2":"Ambitious","3":"Family-focused","4":"Adventurous","5":"Philanthropic"};
+    game.characterName=name.trim().slice(0,24);
+    game.personality=map[personality.trim()]||personality.trim().slice(0,24)||"Balanced";
+    const gender=prompt("👤 Gender (optional):",game.gender||"Not specified");
+    if(gender!==null && gender.trim()) game.gender=gender.trim().slice(0,20);
+    addNews("👤 Character created: "+game.characterName+".",true);
+    achievementSound();
+    saveSilent();
+    render();
+}
+
+function setOnlineName(){
+    const n=prompt("🏷️ Choose your online name:",game.onlineName||"");
+    if(n===null)return;
+    if(!n.trim()){showToast("❌ Enter an online name.");return;}
+    game.onlineName=n.trim().slice(0,20);
+    addNews("🌐 Your Empire Life online name is now "+game.onlineName+".",true);
+    saveSilent();
+    render();
+}
+
+function addFriend(){
+    const n=prompt("👥 Enter your friend's online name:");
+    if(n===null||!n.trim())return;
+    const name=n.trim().slice(0,20);
+    if(name.toLowerCase()===(game.onlineName||"").toLowerCase()){
+        showToast("❌ You can't add yourself.");
+        return;
+    }
+    if(!game.friends.includes(name)) game.friends.push(name);
+    showToast("👥 "+name+" added as a friend.");
+    saveSilent();
+    render();
+}
+
+function createFamilyEvent(){
+    ensureV2();
+    const a=currentAge();
+    if(a<18){showToast("❤️ Family relationships unlock in adult life.");return;}
+    if(!game.family.partner){
+        game.family.partner={name:"Partner",age:Math.max(18,a),happiness:80};
+        game.happiness=Math.min(100,game.happiness+8);
+        addNews("❤️ You started a serious relationship and built a family.",true);
+    }else if(game.family.children.length<6){
+        const n=game.family.children.length+1;
+        const childAge=0;
+        game.family.children.push({name:"Child "+n,age:childAge,skills:0,happiness:75});
+        game.family.familyHappiness=Math.min(100,game.family.familyHappiness+3);
+        game.happiness=Math.min(100,game.happiness+3);
+        addNews("👶 A new child joined your family: Child "+n+".",true);
+    }else{
+        showToast("👨‍👩‍👧‍👦 Your immediate family is full.");
+        return;
+    }
+    saveSilent();
+    render();
+}
+
+function familyActivity(){
+    ensureV2();
+    if(!game.family.partner && !game.family.children.length){
+        showToast("❤️ Build a family first.");
+        return;
+    }
+    game.family.familyHappiness=Math.min(100,game.family.familyHappiness+5);
+    game.happiness=Math.min(100,game.happiness+5);
+    game.stress=Math.max(0,game.stress-4);
+    game.lifeWealth+=3;
+    addNews("❤️ You spent quality time with your family.",true);
+    saveSilent();
+    render();
+}
+
+function renderFamilyPanel(){
+    ensureV2();
+    const el=document.getElementById("familyPanel");
+    if(!el)return;
+    let h="";
+    if(game.family.partner){
+        h+=`<div class="family-member"><b>❤️ ${game.family.partner.name}</b><div class="small">Partner • Family happiness ${Math.round(game.family.familyHappiness)}%</div></div>`;
+    }else{
+        h+=`<div class="family-member"><b>💗 No partner yet</b><div class="small">You can start a family in adult life.</div></div>`;
+    }
+    if(game.family.children.length){
+        game.family.children.forEach((c,i)=>{
+            h+=`<div class="family-member"><b>👶 ${c.name}</b><div class="small">Age ${c.age} • Happiness ${Math.round(c.happiness||75)}%</div></div>`;
+        });
+    }
+    h+=`<div class="family-grid">
+        <button onclick="createFamilyEvent()">❤️ ${game.family.partner?"Have / Add Child":"Start a Family"}</button>
+        <button onclick="familyActivity()">👨‍👩‍👧 Family Time</button>
+    </div>`;
+    h+=`<p class="small">Generation ${game.dynastyGeneration||1} • Family wealth can continue through your descendants.</p>`;
+    el.innerHTML=h;
+}
+
+function researchLongevity(){
+    ensureV2();
+    if(!game.longevity.companyOwned){
+        showToast("🧬 Buy the Longevity Research Company first.");
+        show("market");
+        marketTab("business");
+        return;
+    }
+    const c=game.companies.find(x=>x.longevity);
+    if(!c){game.longevity.companyOwned=false;return;}
+    const cost=Math.min(game.cash,Math.max(100000,Math.round(1000000*Math.pow(3,Math.max(0,game.longevity.stage-1)))));
+    if(game.cash<cost){
+        showToast("🧬 Research requires "+money(cost)+".");
+        return;
+    }
+    game.cash-=cost;
+    game.longevity.research=(game.longevity.research||0)+10;
+    c.research=(c.research||0)+10;
+    if(game.longevity.research>=100 && game.longevity.stage<2){
+        game.longevity.stage=2;
+        game.lifespan=Math.max(game.lifespan,120);
+        addNews("🧬 Major longevity breakthrough! Expected lifespan has increased.",true);
+        achievementSound();
+    }
+    if(game.longevity.research>=200 && game.longevity.stage<3){
+        game.longevity.stage=3;
+        game.lifespan=Math.max(game.lifespan,200);
+        addNews("🧬 Human ageing research has entered a new era.",true);
+        achievementSound();
+    }
+    if(game.longevity.research>=300 && game.longevity.stage<4){
+        game.longevity.stage=4;
+        game.lifespan=Math.max(game.lifespan,350);
+        addNews("🧬 Project 500 trials are approaching.",true);
+        achievementSound();
+    }
+    if(game.longevity.research>=500 && !game.longevity.project500){
+        game.longevity.project500=true;
+        game.lifespan=500;
+        game.longevity.unlockedAge=500;
+        addNews("🎉 PROJECT 500 UNLOCKED! Your character can now live up to 500 years.",true);
+        achievementSound();
+    }
+    saveSilent();
+    render();
+}
+
+function renderLongevityPanel(){
+    ensureV2();
+    const el=document.getElementById("longevityPanel");
+    if(!el)return;
+    const stage=game.longevity.stage||0;
+    const labels=["Not started","Company founded","Early breakthrough","Advanced ageing research","Project 500 trials"];
+    let h=`<div class="row"><span>Research stage</span><b>${labels[Math.min(stage,4)]}</b></div>
+            <div class="row"><span>Research progress</span><b>${game.longevity.research||0}/500</b></div>
+            <div class="progress"><div class="progress-bar" style="width:${Math.min(100,(game.longevity.research||0)/5)}%"></div></div>
+            <div class="row"><span>Maximum lifespan</span><b>${game.lifespan||85} years</b></div>`;
+    if(game.longevity.project500){
+        h+=`<div class="success-card" style="padding:12px;border-radius:12px"><b>🧬 PROJECT 500 UNLOCKED</b><p class="small">You can potentially live to age 500. Death is still possible from serious events.</p></div>`;
+    }else{
+        h+=`<p class="small">Buy the Longevity Research Company from the Business Market, then fund research here.</p>
+             <button onclick="researchLongevity()">🧬 Fund Longevity Research</button>`;
+    }
+    el.innerHTML=h;
+}
+
+function renderMultiplayerPanel(){
+    ensureV2();
+    const el=document.getElementById("multiplayerPanel");
+    if(!el)return;
+    const friends=game.friends||[];
+    el.innerHTML=`<div class="row"><span>Your online name</span><b>${htmlEscape(game.onlineName||"Not set")}</b></div>
+        <div class="row"><span>Players per world</span><b>Up to 5</b></div>
+        <p class="small">This V2 build includes the local identity/friends design. Live internet co-op requires a shared backend so players can actually connect.</p>
+        <button onclick="setOnlineName()">🏷️ Set Online Name</button>
+        <button onclick="addFriend()">👥 Add Friend</button>
+        <div>${friends.length?friends.map(x=>`<span class="pill">👤 ${htmlEscape(x)}</span>`).join(""):"<span class='small'>No friends added yet.</span>"}</div>`;
+}
+
+function htmlEscape(v){
+    return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+function calculateLifeWealth(){
+    ensureV2();
+    const familyScore=(game.family.familyHappiness||0)+game.family.children.length*8+(game.family.partner?12:0);
+    const relationshipScore=Math.min(100,game.happiness);
+    const legacy=Math.min(100,(game.skills||0)*2+(game.properties||[]).length*3+(game.companies||[]).length*4);
+    game.lifeWealth=Math.round((familyScore+relationshipScore+legacy)/3);
+    return game.lifeWealth;
+}
+
+function ageFamilyOneYear(){
+    ensureV2();
+    game.family.children.forEach(c=>{
+        c.age=(c.age||0)+1;
+        c.happiness=Math.max(0,Math.min(100,(c.happiness||75)+(Math.random()>.7?3:-1)));
+        c.skills=(c.skills||0)+(c.age<18?1:0);
+    });
+    game.family.grandchildren.forEach(c=>c.age=(c.age||0)+1);
+    if(game.family.children.some(c=>c.age>=18) && Math.random()<.08){
+        const adults=game.family.children.filter(c=>c.age>=18);
+        const parent=adults[Math.floor(Math.random()*adults.length)];
+        if(!game.family.grandchildren.some(c=>c.parent===parent.name)){
+            game.family.grandchildren.push({name:parent.name+"'s child",age:0,parent:parent.name});
+            addNews("👶 A grandchild has been born into your dynasty.",true);
+        }
+    }
+}
+
+function checkMortality(){
+    ensureV2();
+    if(game.deceased)return true;
+    const a=currentAge();
+    const max=game.lifespan||85;
+    let chance=0;
+    if(a>=max) chance=.08;
+    else if(a>=max-10) chance=.01+(a-(max-10))*.005;
+    else if(a>=120) chance=.001;
+    else chance=0;
+
+    if(Math.random()<chance){
+        dieNaturally();
+        return true;
+    }
+    return false;
+}
+
+function dieNaturally(){
+    ensureV2();
+    if(game.deceased)return;
+    game.deceased=true;
+    game.causeOfDeath="natural causes / age";
+    game.successionPending=game.family.children.length>0;
+    addNews("⚰️ "+(game.characterName||"Your character")+" died at age "+currentAge()+" from "+game.causeOfDeath+".",false);
+    showToast("⚰️ Your life has ended. Your dynasty can continue.");
+    achievementSound();
+    saveSilent();
+}
+
+function continueAsChild(index){
+    ensureV2();
+    const child=game.family.children[index];
+    if(!child)return;
+    const inheritedCash=Math.max(0,Math.round(game.cash*.5));
+    game.deceased=false;
+    game.successionPending=false;
+    game.characterName=child.name;
+    game.age=Math.max(18,child.age||18);
+    game.birthYear=game.year-game.age;
+    game.cash=inheritedCash;
+    game.job="Unemployed";
+    game.salary=0;
+    game.career=null;
+    game.level=0;
+    game.experience=0;
+    game.performance=70;
+    game.dynastyGeneration=(game.dynastyGeneration||1)+1;
+    game.health=90;
+    game.lifespan=game.longevity.project500?500:85;
+    game.causeOfDeath="";
+    addNews("👑 Succession: you are now playing as "+game.characterName+". The family dynasty continues.",true);
+    achievementSound();
+    saveSilent();
+    render();
+}
+
+function renderDeathScreen(){
+    const box=document.getElementById("lifeChoices");
+    if(!box)return;
+    if(!game.deceased)return false;
+    let h=`<div class="card danger-card"><h3>⚰️ Life Complete</h3>
+        <p><b>${htmlEscape(game.characterName||"Your character")}</b> lived to age ${currentAge()}.</p>
+        <p class="small">Cause: ${htmlEscape(game.causeOfDeath||"Unknown")}</p>
+        <p class="small">Your story can continue through your family.</p></div>`;
+    if(game.family.children.length){
+        h+=`<div class="card"><h3>👑 Continue the Dynasty</h3>`;
+        game.family.children.forEach((c,i)=>{
+            h+=`<div class="family-member"><b>${htmlEscape(c.name)}</b><div class="small">Age ${c.age}</div><button onclick="continueAsChild(${i})">👑 Play as ${htmlEscape(c.name)}</button></div>`;
+        });
+        h+=`</div>`;
+    }else{
+        h+=`<div class="card"><button onclick="newGame()">🌱 Start a New Life</button></div>`;
+    }
+    box.innerHTML=h;
+    return true;
+}
+
+
+/* =====================================================
+   LIFE & EDUCATION
+===================================================== */
+
+function currentAge(){
+    return Math.max(10, game.year-game.birthYear);
+}
+
+function ageStage(){
+    const a=currentAge();
+    if(a<16) return "School";
+    if(a<18) return "College / Sixth Form / Apprenticeship";
+    if(a<21) return "Further Education / Early Career";
+    return "Adult Life";
+}
+
+function chooseSchool(type,cost,skill,happy){
+    if(currentAge()>15){
+        showToast("🏫 School choice is finished.");
+        return;
+    }
+    if(game.school){
+        showToast("🏫 You have already chosen a school.");
+        return;
+    }
+
+    let actualCost=cost;
+
+    /* State school is always free. If the player cannot afford a paid school,
+       automatically give them a scholarship application instead of blocking them. */
+    if(cost>0 && game.cash<cost){
+        const scholarshipChance = type==="Academy" ? 0.85 : 0.65;
+        if(Math.random() <= scholarshipChance){
+            actualCost=0;
+            game.news.unshift({
+               text:"🎓 Scholarship awarded! You can attend "+type+" without paying the normal fees.",
+               good:true,
+               year:game.year,
+               month:game.month
+            });
+            showToast("🎓 Scholarship awarded — your school is covered!");
+        }else{
+            showToast("💷 You don't have enough money, but you can choose the free Local State School.");
+            return;
+        }
+    }
+
+    game.cash-=actualCost;
+    game.school=type;
+    game.skills+=skill;
+    game.happiness=Math.max(0,Math.min(100,game.happiness+happy));
+    addNews("🏫 You chose "+type+" for your school.",false);
+    saveSilent();
+    render();
+}
+
+function chooseEducation(path,cost,skill,qualification){
+    const a=currentAge();
+    if(a<16){
+        showToast("📚 Finish school first.");
+        return;
+    }
+    if(game.educationLevel>=2 && game.education===path){
+        showToast("🎓 You are already on this route.");
+        return;
+    }
+    if(game.cash<cost){
+        showToast("❌ You need "+money(cost)+".");
+        return;
+    }
+    game.cash-=cost;
+    game.education=path;
+    game.educationLevel=Math.max(game.educationLevel, path==="University"?3:path==="College / Sixth Form"?2:1);
+    game.skills+=skill;
+    game.qualification=qualification;
+    game.happiness=Math.max(0,Math.min(100,game.happiness+4));
+    addNews("🎓 Education choice: "+path+".",false);
+    saveSilent();
+    render();
+}
+
+function studyAction(){
+    const a=currentAge();
+    if(a>=18 && game.education==="University" && game.age<21){
+        game.skills+=2;
+        game.happiness=Math.max(0,game.happiness-1);
+        game.stress=Math.min(100,game.stress+3);
+        game.educationAction=true;
+        addNews("📚 You studied hard and improved your skills.",false);
+        achievementSound();
+        render();
+        return;
+    }
+    if(a<18){
+        game.skills+=2;
+        game.happiness=Math.max(0,game.happiness-1);
+        game.stress=Math.min(100,game.stress+2);
+        game.educationAction=true;
+        addNews("📚 You studied and improved your skills.",false);
+        render();
+        return;
+    }
+    showToast("🎓 Your current education route has finished.");
+}
+
+function renderLife(){
+    ensureV2();
+    game.age=currentAge();
+    calculateLifeWealth();
+    const ageEl=document.getElementById("ageDisplay");
+    if(ageEl) ageEl.textContent=game.age;
+
+    const edu=document.getElementById("educationDisplay");
+    if(edu) edu.textContent=ageStage();
+
+    const school=document.getElementById("schoolDisplay");
+    if(school) school.textContent=game.school||"Not chosen";
+
+    const skills=document.getElementById("skillDisplay");
+    if(skills) skills.textContent=game.skills;
+
+    const h=document.getElementById("happinessDisplay");
+    const hb=document.getElementById("happinessBar");
+    if(h) h.textContent=Math.round(game.happiness)+"%";
+    if(hb) hb.style.width=Math.max(0,Math.min(100,game.happiness))+"%";
+
+    const st=document.getElementById("stressDisplay");
+    const sb=document.getElementById("stressBar");
+    if(st) st.textContent=Math.round(game.stress)+"%";
+    if(sb) sb.style.width=Math.max(0,Math.min(100,game.stress))+"%";
+
+    const cn=document.getElementById("characterName");
+    const pd=document.getElementById("personalityDisplay");
+    const lw=document.getElementById("lifeWealthDisplay");
+    if(cn) cn.textContent=game.characterName||"Not created";
+    if(pd) pd.textContent=game.personality||"Balanced";
+    if(lw) lw.textContent=Math.round(game.lifeWealth||0);
+
+    renderFamilyPanel();
+    renderLongevityPanel();
+    renderMultiplayerPanel();
+
+    const moreName=document.getElementById("moreOnlineName");
+    if(moreName) moreName.textContent=game.onlineName||"Not set";
+
+    const box=document.getElementById("lifeChoices");
+    if(!box) return;
+    if(renderDeathScreen()) return;
+
+    const a=currentAge();
+    let html="";
+
+    if(a<16){
+        html+=`<div class="card"><h3>🏫 Choose your school</h3>
+        <p class="small">Your choice affects skills and happiness.</p>
+        <div class="life-choice"><h3>🏫 Local State School</h3><p>Free • +1 skill each school year</p><button onclick="chooseSchool('Local State School',0,1,2)">Choose</button></div>
+        <div class="life-choice"><h3>⭐ Academy</h3><p>£500 normally • Scholarships can cover the cost.</p><button onclick="chooseSchool('Academy',500,2,1)">Apply for Academy</button></div>
+        <div class="life-choice"><h3>🎓 Private School</h3><p>£5,000 normally • Apply for a scholarship if you cannot afford it.</p><button onclick="chooseSchool('Private School',5000,4,0)">Apply for Scholarship</button></div></div>`;
+        html+=`<div class="card"><h3>💷 School Funding</h3>
+        <p class="small">You don't need to start rich. State school is free, and paid schools can offer scholarships when you cannot afford the fees.</p>
+        </div>
+        <div class="card"><h3>📚 School Day</h3><p class="small">Build your skills while you're young.</p><button onclick="studyAction()">📚 Study Hard</button></div>`;
+    } else if(a<18){
+        html+=`<div class="card"><h3>🎓 Choose your next step</h3>
+        <div class="life-choice"><h3>📖 College / Sixth Form</h3><p>Build academic skills for university and professional careers.</p><button onclick="chooseEducation('College / Sixth Form',0,3,'College qualification')">Choose</button></div>
+        <div class="life-choice"><h3>🔧 Apprenticeship</h3><p>Learn while earning and unlock practical careers.</p><button onclick="chooseEducation('Apprenticeship',0,4,'Apprenticeship qualification')">Choose</button></div>
+        <div class="life-choice"><h3>💼 Work Early</h3><p>Start earning sooner, with fewer qualifications.</p><button onclick="chooseEducation('Work',0,1,'Entry-level experience')">Choose</button></div></div>
+        <button onclick="studyAction()">📚 Study / Train</button>`;
+    } else if(a<21){
+        html+=`<div class="card"><h3>🏛️ Adult education choices</h3>
+        <div class="life-choice"><h3>🎓 University</h3><p>Costs £9,250. Major boost for professional careers.</p><button onclick="chooseEducation('University',9250,10,'University degree')">Choose University</button></div>
+        <div class="life-choice"><h3>🔧 Continue Apprenticeship</h3><p>Build practical skills and experience.</p><button onclick="chooseEducation('Apprenticeship',0,5,'Advanced apprenticeship')">Continue</button></div>
+        <div class="life-choice"><h3>💼 Enter Full-Time Work</h3><p>Build experience and start your career.</p><button onclick="chooseEducation('Work',0,2,'Work experience')">Start Working</button></div>
+        <button onclick="studyAction()">📚 Study / Train</button></div>`;
+    } else {
+        html+=`<div class="card"><h3>🌍 Adult Life</h3><p class="small">Education: ${game.education}</p><p class="small">Qualification: ${game.qualification||"None"}</p><p class="small">Skills: ${game.skills}</p><button onclick="show('career')">💼 Find a Career</button></div>`;
+    }
+    box.innerHTML=html;
+}
+
+function renderWork(){
+    const el=document.getElementById("workInfo");
+    if(!el) return;
+    const a=currentAge();
+    if(a<18){
+        el.innerHTML=`<div class="card hero"><h3>🧒 You're still in education</h3><p>Age ${a}. Use the Life page to study, choose school and plan your future.</p><button onclick="show('life')">🌱 Open My Life</button></div>`;
+        return;
+    }
+    if(!game.career){
+        el.innerHTML=`<div class="card"><h3>💼 No job yet</h3><p class="small">Choose a career first.</p><button onclick="show('career')">💼 Find a Job</button></div>`;
+        return;
+    }
+    el.innerHTML=`<div class="card hero">
+        <h2>${game.job}</h2>
+        <div class="row"><span>Performance</span><b>${game.performance}%</b></div>
+        <div class="progress"><div class="progress-bar" style="width:${game.performance}%"></div></div>
+        <div class="row"><span>Experience</span><b>${game.experience} months</b></div>
+        <div class="row"><span>Stress</span><b>${Math.round(game.stress)}%</b></div>
+        <div class="action-grid">
+            <button onclick="workHard()">💪 Work Hard</button>
+            <button onclick="normalWork()">📋 Normal Work</button>
+            <button onclick="training()">📚 Training (£500)</button>
+            <button onclick="takeItEasy()">😌 Take It Easy</button>
+        </div>
+    </div>`;
+}
+
+function workHard(){
+    if(currentAge()<18 || !game.career) return;
+    game.performance=Math.min(100,game.performance+5);
+    game.stress=Math.min(100,game.stress+6);
+    game.happiness=Math.max(0,game.happiness-2);
+    game.workAction=true;
+    addNews("💪 You worked hard and your performance improved.",false);
+    achievementSound();
+    render();
+}
+function normalWork(){
+    if(currentAge()<18 || !game.career) return;
+    game.performance=Math.min(100,game.performance+2);
+    game.stress=Math.min(100,game.stress+2);
+    game.workAction=true;
+    addNews("📋 You had a steady month at work.",false);
+    moneySound();
+    render();
+}
+function training(){
+    if(currentAge()<18 || !game.career) return;
+    if(game.cash<500){showToast("❌ You need £500 for training.");return;}
+    game.cash-=500;
+    game.performance=Math.min(100,game.performance+8);
+    game.skills+=2;
+    game.stress=Math.min(100,game.stress+2);
+    game.workAction=true;
+    addNews("📚 You completed training and improved your performance.",false);
+    promotionSound();
+    render();
+}
+function takeItEasy(){
+    if(currentAge()<18 || !game.career) return;
+    game.performance=Math.max(20,game.performance-2);
+    game.stress=Math.max(0,game.stress-10);
+    game.happiness=Math.min(100,game.happiness+4);
+    game.workAction=true;
+    addNews("😌 You took some time to recover from work.",false);
+    render();
+}
+
+/* =====================================================
+   CAREER
+===================================================== */
+
+function renderCareer(){
+
+    const el=
+        document.getElementById("careerInfo");
+
+    if(!game.career){
+
+        el.innerHTML=`
+
+        <div class="card">
+
+            <h3>🔴 Unemployed</h3>
+
+            <p class="small">
+                You currently have no income.
+            </p>
+
+        </div>`;
+
+        return;
+    }
+
+    const c=careers[game.career];
+    const level=c.levels[game.level];
+    const next=c.levels[game.level+1];
+
+    el.innerHTML=`
+
+    <div class="card hero">
+
+        <h2>${level[0]}</h2>
+
+        <div class="row">
+            <span>Salary</span>
+            <b>${money(game.salary)}/year</b>
+        </div>
+
+        <div class="row">
+            <span>Experience</span>
+            <b>${game.experience} months</b>
+        </div>
+
+        <div class="row">
+            <span>Performance</span>
+            <b>${game.performance}%</b>
+        </div>
+
+        ${
+            next
+            ?
+            `
+            <hr>
+
+            <div class="small">
+                NEXT PROMOTION
+            </div>
+
+            <b>${next[0]}</b>
+
+            <p>
+                ${money(next[1])}/year
+            </p>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    style="
+                    width:${Math.min(
+                        100,
+                        game.experience/next[2]*100
+                    )}%">
+                </div>
+
+            </div>
+            `
+            :
+            `<p class="good">🏆 Top level reached</p>`
+        }
+
+    </div>`;
+
+}
+
+
+function renderJobs(){
+
+    let html="";
+
+    careers.forEach((c,i)=>{
+
+        const first=c.levels[0];
+
+        html+=`
+
+        <div class="card">
+
+            <h3>${c.name}</h3>
+
+            <b>${first[0]}</b>
+
+            <p>
+                Starting salary:
+                ${money(first[1])}/year
+            </p>
+
+            <button onclick="startCareer(${i})">
+                💼 Apply
+            </button>
+
+        </div>`;
+
+    });
+
+    document.getElementById("jobs").innerHTML=html;
+
+}
+
+
+function startCareer(i){
+
+    if(currentAge()<18){
+        showToast("🧒 You need to be 18 before starting a full career.");
+        show("life");
+        return;
+    }
+
+    const c=careers[i];
+
+    game.career=i;
+    game.level=0;
+    game.experience=0;
+    game.job=c.levels[0][0];
+    game.salary=c.levels[0][1];
+    game.performance=70;
+
+    promotionSound();
+
+    addNews(
+        "💼 You got a job as "+
+        game.job+
+        " earning "+
+        money(game.salary)+
+        " per year.",
+        false
+    );
+
+    showToast("💼 Job accepted!");
+
+    render();
+
+}
+
+
+/* =====================================================
+   TIME
+===================================================== */
+
+function advanceMonth(){
+
+    clickSound();
+    ensureV2();
+    if(game.deceased){
+        showToast("⚰️ This life has ended. Continue as a family member.");
+        show("life");
+        return;
+    }
+
+    const a=currentAge();
+
+    /* Education / childhood does not require a job */
+    if(a<18){
+        game.stress=Math.max(0,game.stress-1);
+        if(!game.educationAction) game.skills+=1;
+        game.educationAction=false;
+game.companies=(game.companies||[]).map(c=>({
+    ...c,
+    totalInvested:c.totalInvested??c.price??0,
+    totalDividends:c.totalDividends??0,
+    expansions:c.expansions??0,
+    costCuts:c.costCuts??0
+}));
+        if(game.school) game.skills+=1;
+        if(Math.random()<.15){
+            game.happiness=Math.max(0,Math.min(100,game.happiness+(Math.random()>.5?4:-4)));
+            addNews(Math.random()>.5 ? "📚 You had a great month at school." : "⚠️ School was difficult this month.");
+        }
+    } else if(!game.career){
+        badNewsSound();
+        showToast("⚠️ Choose a career first.");
+        show("career");
+        return;
+    } else {
+        game.experience++;
+        if(!game.workAction){
+            game.performance=Math.max(20,game.performance-1);
+        }
+        game.workAction=false;
+
+    const monthly=(currentAge()>=18 && game.career)?game.salary/12:0;
+    const tax=monthly*.20;
+    const living=currentAge()>=18?1200:0;
+    const takeHome=monthly-tax-living;
+
+    game.cash+=takeHome;
+
+    if(takeHome>0) moneySound();
+
+    game.properties.forEach(
+        p=>game.cash+=p.rent
+    );
+
+    let businessProfit=0;
+
+    game.companies.forEach(c=>{
+
+        const old=c.profit;
+
+        const change=.85+Math.random()*.30;
+
+        const profit=old*change;
+
+        businessProfit+=profit;
+
+        game.cash+=profit;
+
+        c.value*=
+            1+(Math.random()*.06-.02);
+
+        if(profit<old*.9)
+            c.health=Math.max(10,c.health-2);
+
+        else if(profit>old*1.05)
+            c.health=Math.min(100,c.health+1);
+
+    });
+
+    if(businessProfit>0)
+        profitSound();
+
+    let investmentChange=0;
+
+    Object.keys(game.investments)
+    .forEach(i=>{
+
+        const old=game.investments[i];
+
+        const rate=investments[i][1]/12;
+
+        const random=(Math.random()-.5)*.04;
+
+        game.investments[i]*=
+            1+rate+random;
+
+        investmentChange+=
+            game.investments[i]-old;
+
+    });
+
+    if(investmentChange>50)
+        profitSound();
+
+    if(investmentChange<-50)
+        lossSound();
+
+
+    const career=careers[game.career];
+
+    const next=career.levels[game.level+1];
+
+    if(
+        next &&
+        game.experience>=next[2] &&
+        game.performance>=75 &&
+        currentAge()>=18
+    ){
+
+        game.level++;
+
+        game.job=next[0];
+        game.salary=next[1];
+        game.performance=75;
+
+        promotionSound();
+
+        addNews(
+            "🎉 PROMOTION! You are now "+
+            game.job+
+            " earning "+
+            money(game.salary)+
+            " per year.",
+            false
+        );
+
+        showToast("🎉 PROMOTION!");
+
+    }else{
+
+        const change=
+            Math.random()>.65
+            ?2
+            :Math.random()<.25
+            ?-3
+            :0;
+
+        game.performance=
+            Math.max(
+                20,
+                Math.min(
+                    100,
+                    game.performance+change
+                )
+            );
+
+    }
+
+    }
+
+    if(a>=18 && game.career){
+        game.stress=Math.max(0,game.stress-1);
+    }
+
+    randomEvent();
+
+    game.month++;
+
+    if(game.month>12){
+
+        game.month=1;
+        game.year++;
+
+        achievementSound();
+
+        addNews(
+            "🎉 A new year has begun: "+
+            game.year,
+            false
+        );
+
+        ageFamilyOneYear();
+        if(checkMortality()){
+            saveSilent();
+            render();
+            return;
+        }
+    }
+
+    saveSilent();
+
+    render();
+
+}
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+function randomEvent(){
+
+    const r=Math.random();
+
+    if(r<.08){
+
+        game.performance=
+            Math.min(
+                100,
+                game.performance+8
+            );
+
+        achievementSound();
+
+        addNews(
+            "📈 Your performance review was excellent. Your employer is impressed."
+        );
+
+    }
+
+    else if(r<.16){
+
+        game.performance=
+            Math.max(
+                20,
+                game.performance-10
+            );
+
+        badNewsSound();
+
+        addNews(
+            "⚠️ Your employer has raised concerns about your performance."
+        );
+
+    }
+
+    else if(r<.23){
+
+        game.companies.forEach(c=>{
+            c.profit*=1.15;
+            c.value*=1.08;
+            c.health=Math.min(100,c.health+5);
+        });
+
+        profitSound();
+
+        addNews(
+            "📈 ECONOMIC BOOM! Businesses are making more money."
+        );
+
+    }
+
+    else if(r<.30){
+
+        game.companies.forEach(c=>{
+            c.profit*=.85;
+            c.value*=.94;
+            c.health=Math.max(10,c.health-7);
+        });
+
+        lossSound();
+
+        addNews(
+            "📉 RECESSION! Businesses are struggling."
+        );
+
+    }
+
+    else if(r<.36){
+
+        game.companies
+        .filter(c=>c.name.includes("Energy"))
+        .forEach(c=>{
+            c.profit*=1.25;
+            c.value*=1.15;
+        });
+
+        profitSound();
+
+        addNews(
+            "⚡ ENERGY CRISIS! Energy prices surge."
+        );
+
+    }
+
+    else if(r<.42){
+
+        game.companies
+        .filter(c=>c.name.includes("Water"))
+        .forEach(c=>{
+            c.profit*=1.20;
+            c.value*=1.15;
+        });
+
+        profitSound();
+
+        addNews(
+            "💧 WATER DEMAND RISES! Water companies are booming."
+        );
+
+    }
+
+    else if(r<.48){
+
+        const bonus=
+            500+
+            Math.random()*3000;
+
+        game.cash+=bonus;
+
+        moneySound();
+
+        addNews(
+            "💷 Unexpected bonus! You received "+
+            money(bonus)+"."
+        );
+
+    }
+
+    else if(r<.53){
+
+        const bill=
+            300+
+            Math.random()*1500;
+
+        game.cash=
+            Math.max(
+                0,
+                game.cash-bill
+            );
+
+        lossSound();
+
+        addNews(
+            "💸 Unexpected expense! You paid "+
+            money(bill)+"."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   NEWS
+===================================================== */
+
+function addNews(text,playAudio=true){
+
+    game.news.unshift({
+        date:dateString(),
+        text:text
+    });
+
+    if(game.news.length>50)
+        game.news.pop();
+
+    if(playAudio)
+        newsSound();
+
+    renderNews();
+
+}
+
+
+function renderNews(){
+
+    let html="";
+
+    game.news.forEach(n=>{
+
+        html+=`
+
+        <div class="news">
+
+            <div class="small">
+                ${n.date}
+            </div>
+
+            <br>
+
+            ${n.text}
+
+        </div>`;
+
+    });
+
+    document
+        .getElementById("newsList")
+        .innerHTML=
+        html||
+        "<p class='small'>No news yet.</p>";
+
+    if(game.news[0]){
+
+        document
+            .getElementById("latestNews")
+            .innerHTML=
+            game.news[0].text;
+
+    }
+
+}
+
+
+/* =====================================================
+   OWNED ASSETS
+===================================================== */
+
+function renderOwned(){
+
+    let html="";
+
+    game.cars.forEach((c,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${c.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${c.name}
+                </div>
+
+                <div class="price">
+                    ${money(c.price)}
+                </div>
+
+                <button
+                    class="red"
+                    onclick="sellCar(${i})">
+                    💵 Sell
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+
+    game.properties.forEach((p,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${p.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${p.name}
+                </div>
+
+                <div class="price">
+                    ${money(p.price)}
+                </div>
+
+                <button
+                    class="red"
+                    onclick="sellProperty(${i})">
+                    💵 Sell
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+
+    game.companies.forEach((c,i)=>{
+
+        html+=`
+
+        <div class="market-card">
+
+            <img
+                class="market-image"
+                src="${c.image}"
+            >
+
+            <div class="market-body">
+
+                <div class="market-title">
+                    ${c.name}
+                </div>
+
+                <div class="price">
+                    ${money(c.value)}
+                </div>
+
+                <div class="badge">
+                    Profit ${money(c.profit)}/month
+                </div>
+
+                <div class="badge">
+                    Health ${Math.round(c.health)}%
+                </div>
+
+                <div class="badge">
+                    💷 Monthly profit ${money(c.profit)}
+                </div>
+
+                <div class="business-controls">
+                    <button onclick="investInCompany(${i})">📈 Invest</button>
+                    <button onclick="takeCompanyDividend(${i})">💷 Take Profit</button>
+                    <button onclick="expandCompany(${i})">🚀 Expand</button>
+                    <button onclick="cutCompanyCosts(${i})">✂️ Cut Costs</button>
+                </div>
+
+                <button onclick="manageCompany(${i})">⚙️ Business Dashboard</button>
+
+                <button class="red" onclick="sellCompany(${i})">
+                    💵 Sell Company
+                </button>
+
+            </div>
+
+        </div>`;
+
+    });
+
+
+    if(!html){
+
+        html=`
+
+        <div class="card">
+
+            <h3>👛 Nothing here yet</h3>
+
+            <p class="small">
+                Get a job and start building your empire.
+            </p>
+
+        </div>`;
+
+    }
+
+
+    document
+        .getElementById("ownedContent")
+        .innerHTML=html;
+
+    document
+        .getElementById("ownedCars")
+        .textContent=money(carValue());
+
+    document
+        .getElementById("ownedProperty")
+        .textContent=money(propertyValue());
+
+    document
+        .getElementById("ownedBusiness")
+        .textContent=money(businessValue());
+
+    document
+        .getElementById("ownedInvestments")
+        .textContent=money(investmentValue());
+
+}
+
+
+function sellCar(i){
+
+    const c=game.cars[i];
+
+    const price=Math.round(c.price*.75);
+
+    game.cash+=price;
+
+    game.cars.splice(i,1);
+
+    sellSound();
+
+    addNews(
+        "🚗 You sold your "+
+        c.name+
+        " for "+
+        money(price)+".",
+        false
+    );
+
+    showToast("💵 Car sold!");
+
+    render();
+
+}
+
+
+function sellProperty(i){
+
+    const p=game.properties[i];
+
+    const price=Math.round(p.price*.95);
+
+    game.cash+=price;
+
+    game.properties.splice(i,1);
+
+    sellSound();
+
+    addNews(
+        "🏠 You sold your "+
+        p.name+
+        " for "+
+        money(price)+".",
+        false
+    );
+
+    showToast("💵 Property sold!");
+
+    render();
+
+}
+
+
+function sellCompany(i){
+
+    const c=game.companies[i];
+
+    const price=Math.round(c.value);
+
+    game.cash+=price;
+
+    game.companies.splice(i,1);
+
+    achievementSound();
+
+    addNews(
+        "🏢 You sold "+
+        c.name+
+        " for "+
+        money(price)+".",
+        false
+    );
+
+    showToast("💰 Company sold!");
+
+    render();
+
+}
+
+
+
+/* =====================================================
+   BUSINESS CONTROL ACTIONS
+===================================================== */
+
+function investInCompany(i){
+    const c=game.companies[i];
+    const max=Math.max(0,Math.floor(game.cash));
+    if(max<1000){
+        lossSound();
+        showToast("❌ You need at least £1,000 to invest.");
+        return;
+    }
+    let raw=prompt(
+        "📈 Invest in "+c.name+"\n\n"+
+        "Cash available: "+money(max)+"\n"+
+        "Enter the amount to invest:"
+    );
+    if(raw===null) return;
+    const amount=Math.floor(Number(String(raw).replace(/[^0-9.]/g,"")));
+    if(!Number.isFinite(amount)||amount<1000||amount>game.cash){
+        lossSound();
+        showToast("❌ Enter a valid amount between £1,000 and your cash.");
+        return;
+    }
+    game.cash-=amount;
+    c.value+=amount;
+    c.profit+=amount*.0008;
+    c.health=Math.min(100,c.health+Math.min(15,amount/10000*3));
+    c.totalInvested=(c.totalInvested||0)+amount;
+    profitSound();
+    addNews("📈 You invested "+money(amount)+" into "+c.name+".",false);
+    showToast("📈 Investment made!");
+    render();
+}
+
+function takeCompanyDividend(i){
+    const c=game.companies[i];
+    const dividend=Math.max(0,Math.floor(c.profit*.25));
+    if(dividend<=0){
+        showToast("❌ This company has no available profit.");
+        return;
+    }
+    game.cash+=dividend;
+    c.value=Math.max(c.price||0,c.value-dividend*.35);
+    c.profit=Math.max(100,c.profit-dividend*.08);
+    c.totalDividends=(c.totalDividends||0)+dividend;
+    moneySound();
+    addNews("💷 You took a "+money(dividend)+" dividend from "+c.name+".",false);
+    showToast("💷 Dividend paid to you!");
+    render();
+}
+
+function expandCompany(i){
+    const c=game.companies[i];
+    const cost=Math.max(5000,Math.floor(c.value*.05));
+    if(game.cash<cost){
+        lossSound();
+        showToast("❌ Expansion costs "+money(cost)+".");
+        return;
+    }
+    game.cash-=cost;
+    c.value+=cost*1.35;
+    c.profit*=1.12;
+    c.health=Math.min(100,c.health+8);
+    c.expansions=(c.expansions||0)+1;
+    achievementSound();
+    addNews("🚀 You expanded "+c.name+" for "+money(cost)+". Profit is now "+money(c.profit)+"/month.",false);
+    showToast("🚀 Business expanded!");
+    render();
+}
+
+function cutCompanyCosts(i){
+    const c=game.companies[i];
+    c.profit=Math.max(100, c.profit*1.06);
+    c.health=Math.max(20,c.health-4);
+    c.costCuts=(c.costCuts||0)+1;
+    moneySound();
+    addNews("✂️ You cut operating costs at "+c.name+". Monthly profit improved, but health fell slightly.",false);
+    showToast("✂️ Costs reduced.");
+    render();
+}
+
+/* =====================================================
+   COMPANY MANAGEMENT
+===================================================== */
+
+function manageCompany(i){
+
+    const c=game.companies[i];
+
+    const choice=prompt(
+        "🏢 "+c.name+" BUSINESS DASHBOARD\n\n"+
+        "Value: "+money(c.value)+"\n"+
+        "Profit: "+money(c.profit)+"/month\n"+
+        "Health: "+Math.round(c.health)+"%\n"+
+        "Total invested: "+money(c.totalInvested||0)+"\n"+
+        "Dividends taken: "+money(c.totalDividends||0)+"\n\n"+
+        "1 = Invest a custom amount\n"+
+        "2 = Take 25% profit as dividend\n"+
+        "3 = Expand business\n"+
+        "4 = Cut costs\n"+
+        "5 = Sell company\n"+
+        "6 = Cancel"
+    );
+
+    if(choice==="1") investInCompany(i);
+    else if(choice==="2") takeCompanyDividend(i);
+    else if(choice==="3") expandCompany(i);
+    else if(choice==="4") cutCompanyCosts(i);
+    else if(choice==="5") sellCompany(i);
+}
+
+
+/* =====================================================
+   BANK
+===================================================== */
+
+function loan(amount){
+
+    game.cash+=amount;
+    game.debt+=amount;
+
+    loanSound();
+
+    addNews(
+        "🏦 You borrowed "+
+        money(amount)+
+        " from the bank.",
+        false
+    );
+
+    showToast(
+        "🏦 Borrowed "+money(amount)
+    );
+
+    render();
+
+}
+
+
+function repay(amount){
+
+    const payment=
+        Math.min(
+            amount,
+            game.debt
+        );
+
+    if(
+        payment<=0||
+        payment>game.cash
+    ){
+
+        lossSound();
+
+        showToast(
+            "❌ You can't make that payment."
+        );
+
+        return;
+    }
+
+    game.cash-=payment;
+    game.debt-=payment;
+
+    debtSound();
+
+    addNews(
+        "💳 You repaid "+
+        money(payment)+
+        " of your debt.",
+        false
+    );
+
+    render();
+
+}
+
+
+/* =====================================================
+   SAVE / LOAD
+===================================================== */
+
+function saveSilent(){
+
+    localStorage.setItem(
+        "EMPIRE_LIFE_V10",
+        JSON.stringify(game)
+    );
+
+}
+
+
+function saveGame(){
+
+    saveSilent();
+
+    achievementSound();
+
+    showToast(
+        "💾 Game saved!"
+    );
+
+}
+
+
+function loadGame(){
+
+    const saved=
+        localStorage.getItem(
+            "EMPIRE_LIFE_V10"
+        );
+
+    if(!saved){
+
+        showToast(
+            "❌ No save found."
+        );
+
+        return;
+    }
+
+    try{
+
+        game=JSON.parse(saved);
+
+        achievementSound();
+
+        showToast(
+            "📂 Game loaded!"
+        );
+
+        render();
+
+    }catch(e){
+
+        showToast(
+            "❌ Save could not be loaded."
+        );
+
+    }
+
+}
+
+
+function newGame(){
+
+    if(!confirm(
+        "Start a completely new life at age 10? Your current game will be replaced."
+    )){
+        return;
+    }
+
+    game={
+        year:2026,
+        month:1,
+        birthYear:2016,
+        age:10,
+        cash:0,
+        job:"Unemployed",
+        salary:0,
+        career:null,
+        level:0,
+        experience:0,
+        performance:70,
+        debt:0,
+        cars:[],
+        properties:[],
+        companies:[],
+        investments:{},
+        news:[],
+        school:"",
+        education:"School",
+        educationLevel:0,
+        qualification:"",
+        skills:0,
+        happiness:75,
+        stress:10,
+        workAction:false,
+        educationAction:false
+    };
+
+    saveSilent();
+    achievementSound();
+    addNews("🌱 You are 10 years old. Your life begins with a choice.",false);
+    render();
+}
+
+
+/* =====================================================
+   SOUND SETTINGS
+===================================================== */
+
+function toggleSound(){
+
+    soundEnabled=
+        document
+        .getElementById("soundToggle")
+        .checked;
+
+    if(soundEnabled){
+
+        initAudio();
+        achievementSound();
+
+    }
+
+}
+
+
+function toggleMusic(){
+
+    musicEnabled=
+        document
+        .getElementById("musicToggle")
+        .checked;
+
+    if(musicEnabled)
+        startMusic();
+    else
+        stopMusic();
+
+}
+
+
+function setEffectVolume(){
+
+    effectsVolume=
+        Number(
+            document
+            .getElementById("effectVolume")
+            .value
+        )/100;
+
+    document
+        .getElementById("effectVolumeText")
+        .textContent=
+        Math.round(
+            effectsVolume*100
+        )+"%";
+
+}
+
+
+function setMusicVolume(){
+
+    musicVolume=
+        Number(
+            document
+            .getElementById("musicVolume")
+            .value
+        )/100;
+
+    document
+        .getElementById("musicVolumeText")
+        .textContent=
+        Math.round(
+            musicVolume*100
+        )+"%";
+
+}
+
+
+function testSound(){
+
+    achievementSound();
+
+    showToast(
+        "🔊 Sound system working!"
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer=null;
+
+function showToast(message){
+
+    const t=
+        document.getElementById("toast");
+
+    t.textContent=message;
+
+    t.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=setTimeout(
+        ()=>t.classList.remove("show"),
+        2200
+    );
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+
+function renderBusinessManagement(){
+    const el=document.getElementById("businessManagement");
+    if(!el) return;
+
+    game.companies=game.companies||[];
+
+    game.companies.forEach(c=>{
+        c.health=c.health??75;
+        c.invested=c.invested??Number(c.value||0);
+        c.dividends=c.dividends??0;
+        c.profit=c.profit??0;
+        c.value=c.value??0;
+    });
+
+    if(!game.companies.length){
+        el.innerHTML=`<div class="life-choice">
+            <h3>🏢 No businesses yet</h3>
+            <p>Buy a company from the Market and it will appear here.</p>
+            <button onclick="show('market')">🛒 Find a Business</button>
+        </div>`;
+        return;
+    }
+
+    el.innerHTML=game.companies.map((c,i)=>`
+        <div class="life-choice">
+            <h3>🏢 ${c.name||"Business"}</h3>
+            <div class="row"><span>Company value</span><b>${money(c.value)}</b></div>
+            <div class="row"><span>Monthly profit</span><b>${money(c.profit)}</b></div>
+            <div class="row"><span>Company health</span><b>${Math.round(c.health)}%</b></div>
+            <div class="row"><span>Total invested</span><b>${money(c.invested)}</b></div>
+            <div class="row"><span>Dividends taken</span><b>${money(c.dividends)}</b></div>
+            <div class="action-grid">
+                <button onclick="businessInvest(${i})">📈 Invest</button>
+                <button onclick="businessDividend(${i})">💷 Take Profit</button>
+                <button onclick="businessExpand(${i})">🚀 Expand</button>
+                <button onclick="businessCutCosts(${i})">✂️ Cut Costs</button>
+                <button onclick="businessSell(${i})">💰 Sell Company</button>
+            </div>
+        </div>`).join("");
+}
+
+function businessInvest(i){
+    const c=game.companies[i]; if(!c)return;
+    const amount=Number(prompt("How much would you like to invest?","1000"));
+    if(!Number.isFinite(amount)||amount<=0)return;
+    if(game.cash<amount){showToast("❌ You don't have enough cash.");return;}
+    game.cash-=amount;
+    c.invested+=amount;
+    c.value+=amount*1.05;
+    c.profit+=amount*0.01;
+    c.health=Math.min(100,c.health+2);
+    addNews("📈 You invested "+money(amount)+" into "+c.name+".",true);
+    moneySound(); saveSilent(); render();
+}
+
+function businessDividend(i){
+    const c=game.companies[i]; if(!c)return;
+    const amount=Math.floor(Math.max(0,c.profit*3));
+    if(amount<1){showToast("⚠️ Not enough profit available yet.");return;}
+    game.cash+=amount;
+    c.dividends+=amount;
+    c.value=Math.max(0,c.value-amount*0.25);
+    c.health=Math.max(0,c.health-1);
+    addNews("💷 You took "+money(amount)+" in profit from "+c.name+".",true);
+    moneySound(); saveSilent(); render();
+}
+
+function businessExpand(i){
+    const c=game.companies[i]; if(!c)return;
+    const cost=Math.max(1000,Math.round(c.value*0.10));
+    if(game.cash<cost){showToast("❌ Expansion costs "+money(cost)+".");return;}
+    game.cash-=cost;
+    c.invested+=cost;
+    c.value+=cost*1.35;
+    c.profit+=cost*0.025;
+    c.health=Math.min(100,c.health+4);
+    addNews("🚀 You expanded "+c.name+" for "+money(cost)+".",true);
+    moneySound(); saveSilent(); render();
+}
+
+function businessCutCosts(i){
+    const c=game.companies[i]; if(!c)return;
+    c.profit=Math.max(0,c.profit*1.12);
+    c.health=Math.max(0,c.health-7);
+    addNews("✂️ You cut costs at "+c.name+". Profit increased, but health fell.",false);
+    saveSilent(); render();
+}
+
+function businessSell(i){
+    const c=game.companies[i]; if(!c)return;
+    const value=Math.max(0,Number(c.value||0));
+    if(!confirm("Sell "+c.name+" for "+money(value)+"?"))return;
+    game.cash+=value;
+    game.companies.splice(i,1);
+    addNews("💰 You sold "+c.name+" for "+money(value)+".",true);
+    moneySound(); saveSilent(); render();
+}
+
+function render(){
+    renderBusinessManagement();
+
+    document
+        .getElementById("date")
+        .textContent=dateString();
+
+    document
+        .getElementById("cash")
+        .textContent=money(game.cash);
+
+    document
+        .getElementById("networth")
+        .textContent=money(netWorth());
+
+    document
+        .getElementById("job")
+        .textContent=game.job;
+
+    document
+        .getElementById("salary")
+        .textContent=money(game.salary);
+
+    const homeAge=document.getElementById("homeAge");
+    const homeSkills=document.getElementById("homeSkills");
+    if(homeAge) homeAge.textContent=currentAge();
+    if(homeSkills) homeSkills.textContent=game.skills;
+    const homeLifeWealth=document.getElementById("homeLifeWealth");
+    if(homeLifeWealth) homeLifeWealth.textContent=Math.round(game.lifeWealth||0);
+
+    document
+        .getElementById("debt")
+        .textContent=money(game.debt);
+
+    document
+        .getElementById("carCount")
+        .textContent=game.cars.length;
+
+    document
+        .getElementById("propertyCount")
+        .textContent=game.properties.length;
+
+    renderLife();
+    renderWork();
+    renderCareer();
+    renderJobs();
+    renderOwned();
+    renderNews();
+
+}
+
+
+/* V2 save migration: keep existing V1 saves playable */
+const oldSaved = localStorage.getItem("EMPIRE_LIFE_V10");
+if(oldSaved && !localStorage.getItem("EMPIRE_LIFE_V20")){
+    try{
+        game=JSON.parse(oldSaved);
+        ensureV2();
+        saveSilent();
+    }catch(e){}
+}
+
+/* =====================================================
+   STARTUP
+===================================================== */
+
+const saved=
+    localStorage.getItem(
+        "EMPIRE_LIFE_V10"
+    );
+
+if(saved){
+
+    try{
+
+        game=JSON.parse(saved);
+
+    }catch(e){}
+
+}
+
+ensureV2();
+
+if(!game.news.length){
+
+    game.news.push({
+
+        date:dateString(),
+
+        text:
+        "🌍 Welcome to Empire Life. Your story is about to begin."
+
+    });
+
+}
+
+render();
+
+marketTab("cars");
+
+</script>
+
+</body>
+  </html>
